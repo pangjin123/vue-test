@@ -85,16 +85,224 @@
         {{fullName}}
     </q-card-section>
     <q-separator />
+
+    <!-- 객체로 바인딩하기 -->
+    <q-card-section :class="{active:isActive, 'text-h3': hasError}">객체로 바인딩1</q-card-section>
+    <q-card-section :class="classObject">객체로 바인딩2</q-card-section>
+    <q-separator />
+
+    <!-- 계산된 속성으로 바인딩 -->
+    <q-card-section :class="classobj">계산된 속성으로 바인딩</q-card-section>
+
+    <!-- 배열로 바인딩 -->
+    <q-card-section :class="[activeClass, errorClass]">배열로 바인딩</q-card-section>
+    <q-card-section :class="[isActive ? activeClass : ' ', errorClass]"> 삼항 표현식 클래스 토글 </q-card-section>
+    <q-separator />
+
+    <!-- 인라인 스타일 바인딩 객체 -->
+    <q-card-section :style="styleObject">인라인 스타일 바인딩 객체</q-card-section>
+
+    <!-- 인라인 스타일 바인딩 배열 -->
+    <q-card-section :style="[baseStyles, overridingStyles]"> 인라인 스타일 바인딩 배열</q-card-section>
+    <q-separator />
+
+    <!-- v-if-else -->
+    <q-btn @click="awesome = !awesome" label="버튼"></q-btn>
+    <q-card-section v-if="awesome"> Vue is awesome! </q-card-section>
+    <q-card-section v-else> on no! </q-card-section>
+    <q-separator />
+
+    <!-- v-else-if -->
+    <q-card-section v-if="type == 'A'"> A </q-card-section>
+    <q-card-section v-else-if="type === 'B'"> B </q-card-section>
+    <q-card-section v-else-if="type === 'C'"> C </q-card-section>
+    <q-card-section v-else> Not A/B/C </q-card-section>
+    <q-separator />
+
+    <!-- template에서 v-if -->
+    <div class="q-pa-md row items-start q-gutter-md">
+        <q-card v-if="v_if_ok" dark bordered class="bg-grey-9 my-card">
+            <q-card-section>
+                <div class="text-h6">Our changing Planet</div>
+                <div class="text-subtitle2">by John Doe</div>
+            </q-card-section>
+            <q-separator dark inset />
+            <q-card-section>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua.
+            </q-card-section>
+        </q-card>
+    </div>
+
+    <!-- v-show -->
+    <div class="q-pa-md row items-start q-gutter-md">
+        <q-card
+            v-show="ok"
+            dark
+            bordered
+            class="my-card text-white"
+            style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)"
+        >
+            <q-card-section>
+                <div class="text-h6"> Our Changing Planet</div>
+                <div class="text-subtitle2">by John Doe</div>
+            </q-card-section>
+            <q-separator dark inset />
+            <q-card-section>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua.
+            </q-card-section>
+        </q-card>
+    </div>
+    <q-separator />
+
+    <!-- v-for -->
+    <div class="q-pa-md">
+        <q-lkist v-for="(item, idx) in listItems" :key="idx" bordered separator>
+            <q-item clickable v-ripple>
+                <q-item-section>{{ idx + 1 }}. {{ item.message }}</q-item-section>
+            </q-item>
+        </q-lkist>
+    </div>
+    <q-separator />
+
+    <!-- v-for JavaScript -->
+    <div class="q-pa-md">
+        <q-list v-for="(item, index) of tupleListItems" :key="index" bordered separator>
+            <q-item clickable v-ripple>
+                <q-item-section v-for="(childItem, index) in item.children" :key="index">
+                    <q-item-section>{{ item.message }} - {{ childItem }}</q-item-section>
+                </q-item-section>
+            </q-item>
+         </q-list>
+    </div>
+    <q-separator />
+
+    <!-- v-for 객체에 사용하기 -->
+    <div class="q-pa-md">
+        <q-list
+            v-for="(value, key, index) in myObject"
+            :key="index"
+            bordered
+            separator
+        >
+            <q-item clickable v-ripple>
+                <q-item-section>
+                    {{ index + 1}}. {{ key }} : {{ value }} 
+                </q-item-section>
+            </q-item>
+        </q-list>
+    </div>
+    <q-separator />
+
+    <!-- v-for 정수 사용하기 -->
+    <div class ="q-pa-md row items-start">
+        <q-list v-for="n in 10" :key="n" bordered separator>
+            <q-item clickable v-ripple>
+                <q-item-section> {{ n }} </q-item-section>  <!-- n은 1부터 시작 -->
+            </q-item>
+        </q-list>
+    </div>
+    <q-separator />
+
+    <!-- 컴포넌트에 v-for 사용하기 -->
+    <div class="q-pa-md items-start">
+        <my-component
+            v-for="(item, index) in listItems"
+            :key="index"
+            :item="item"
+            :index="index"
+        ></my-component>
+    </div>
+    <q-separator />
+
+    <!-- 배열 교체 -->
+    <q-card-section>{{ filterItems }}</q-card-section>
+    <q-separator />
+
+    <!-- 필터 -->
+    <q-list v-for="n in evenNumbers" :key="n" bordered separator>
+        <q-item clickable v-ripple>
+            <q-item-section> {{ n }} </q-item-section>
+        </q-item>
+    </q-list>
+    <q-separator />
+
+    <!-- 필터링2 -->
+    <q-list v-for="(numbers, index) in sets" :key="index" bordered separator>
+        <q-item v-for="n in even(numbers)" :key="n" clickable v-ripple>
+            <q-item-section><q-item-label class="text-h6 text-weight-bolder text-center">{{ n }}</q-item-label></q-item-section>
+        </q-item>
+    </q-list>
+    <q-separator />
+    
+    <!-- 인라인 핸들러 -->
+    <div class="q-pa-md row items-start">
+        <q-btn @click="count++" label="카운트" color="primary"></q-btn>
+        <q-card-section>Count is: {{ count }}</q-card-section>
+    </div>
+    <q-separator />
+
+    <!-- 메서드 핸들러 -->
+    <div class="q-pa-md row items-start">
+        <q-btn
+            @click="greet"  
+            label="treet"
+            color="secondary"
+            class="q-ma-sm">
+        </q-btn>
+        <!-- 동작안하는 버튼 -->
+        <q-btn label="Alert" color="primary" @click="alert" class="q-ma-sm" />
+        <q-btn label="Confirm" color="primary" @click="confirm" class="q-ma-sm" />
+        <q-btn label="Prompt" color="primary" @click="prompt" class="q-ma-sm" />
+    </div>
+    <q-separator />
+
+    <!-- 인라인 핸들러에서 메서드 호출하기 -->
+    <div class="q-pa-md row items-start">
+        <q-btn
+            @click="say('안녕')"
+            label="안녕이라고 말히기"
+            color="blue"
+            class="q-ma-sm">
+        </q-btn>
+        <q-btn
+            @click="say('잘가')"
+            label="잘가라고 말하기"
+            color="blue"
+            class="q-ma-sm">
+        </q-btn>
+    </div>
+    <q-separator />
+
+    <!-- 인라인 핸들러에서 이벤트 객체 접근하기 -->
+    <div class="q-pa-md row items-start">
+        <q-btn
+            @click="warn('아직 양식을 제출할 수 없습니다.', $event)"
+            label="아직 양식을 제출할 수 없습니다."
+            color="secondary"
+            class="q-ma-sm">
+        </q-btn>
+        <q-btn
+            @click="(event) => warn('아직 양식을 제출할 수 없습니다1.', event)"
+            label="아직 양식을 제출할 수 없습니다1"
+            color="secondary"
+            class="q-ma-sm">
+        </q-btn>
+    </div>
+    <q-separator />
 </template>
 
 <script>
 import { date } from 'quasar'; //import
 import { nextTick } from 'vue';
 import { debounce } from 'lodash';
+import MyComponent from '../components/MyComponent.vue';
+
 
 export default {
     name:'VueEx',
-    components:{},
+    components:{ MyComponent },
     title: "Vue Basic",
     data(){
         return{     //변수 선언
@@ -143,6 +351,61 @@ export default {
 
             firstName: 'John',
             lastName: 'Doe',
+
+            isActive: true,
+            hasError: false,
+
+            classObject: {
+                active: true,
+                'text-h3': false
+            },
+
+            isActive2: true,
+            error: null,
+
+            activeClass: 'active',
+            errorClass: 'text-danger',
+
+            styleObject: {  //텍스트 스타일
+                color: 'red',
+                fontSize: '13px',
+            },
+            
+            baseStyles: {   //빨간 밑줄
+                textDecorationLine: 'underline',
+                textDecorationThickness: '5px',
+                textDecorationColor: 'red',
+            },
+            overridingStyles:{  //텍스트 스타일
+                color:'blue',
+                fontSize:'35px',
+            },
+
+            awesome: true,  //v-if
+
+            type: "B",  //v-else-if
+
+            v_if_ok: true,  //template에서 v-if
+
+            listItems: [{ message: "Foo"}, {message: "Bar" }],  //v-for
+
+            tupleListItems: [{ message: "Foo", children:["baby"]}, {message: "Bar", children:['child'] }],  //v-for JavaScript
+
+            myObject: {     //v-for 객체 사용
+                title: 'Vue에서 목록을 작성하는 방법',
+                author: '홍길동',
+                publishedAt: '2016-04-10'
+            },
+
+            items: [{ message: "Foo" }, { message: "Bar" }], //배열 교체
+
+            numbers: [1, 2, 3, 4, 5],   //필터링
+
+            sets: [[ 1, 2, 3, 4, 5], [6, 7, 8, 9, 10]], //필터링2
+
+            count: 0,   //인라인 핸들러
+
+            name: "Vue.js",
         }
         //표현식이 아닌 선언식
         {{ var a = 1}}
@@ -168,7 +431,22 @@ export default {
             set(newValue) {
                 [this.firstName, this.lastName] = newValue.split('')
             }
-        }
+        },
+        classObj() {
+            return {
+                active : this.isActive2 && !this.error,
+                'text-h3': this.error && this.error.type === 'fatal'
+            }
+        },
+        filterItems() {
+            return (this.items = this.items.filter((item) =>
+                item.message.match(/Foo/)
+            ));
+        },
+
+        evenNumbers() {     //필터링1
+            return this.numbers.filter(n => n % 2 === 0)
+        },
     },
     watch:{
         inputData: debounce(function(newVal, oldVal) {
@@ -188,6 +466,9 @@ export default {
         console.log(this.methodCount)   //=> 2
 
         this.increment()
+
+        this.error = {};
+        this.error.type = 'fatal';
     },
     methods:{
         calculateDate() {   //함수 선언
@@ -221,11 +502,51 @@ export default {
                 this.str = formattedString;
             }, 1000);
             return this.str; //바인딩되는 변수 필요
-        }
+        },
+
+        even(numbers) {     //필터링2
+            return numbers.filter(number => number % 2 === 0)
+        },
+
+        greet(e) {      //메서드 핸들러
+            this.$q.notify({
+                message: `hello ${this.name}!`,
+                caption: "5 minutes ago",
+                color: "blue",
+            });
+        },
+        say(message) {  //인라인 핸들러에서 메서드 호출
+            alert(message)
+        },
+        warn(message, event) {  //인라인 핸들러에서 이벤트 객체 접근하기
+            if(event) {
+                event.preventDefault();
+                this.$q.dialog({
+                    title: "Alert",
+                    message: `${message}`,
+                })
+                .onOk(() => {
+                    console.log('ok')
+                })
+                .onCancel(() => {
+
+                })
+                .onDismiss(() => {
+
+                });
+            }
+        },
+
     },
 }
 </script>
 
-<style>
-
+<style scoped>
+    .active{
+        color:red;
+    }
+    .my-card {
+        width: 100%;
+        max-width: 250px;
+    }
 </style>
