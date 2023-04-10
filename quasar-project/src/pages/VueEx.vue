@@ -533,7 +533,7 @@ export default {
 
         calculateDate() {
             setInterval(()=> {
-                const timeStamp = Date.new();
+                const timeStamp = Date.now();
                 const formattedString = date.formatDate(timeStamp, "YYYY-MM-DD HH:mm:ss");
                 this.str = formattedString;
             }, 1000);
