@@ -13,6 +13,10 @@ let corsOptions = {
 };
 app.use(cors(corsOptions));
 
+//body parser
+app.use(express.json());
+app.use(express.urlencoded({extends : true }));
+
 //autoRouter
 const autoRouter = require('./autoRoute');
 autoRouter('/api', app);
