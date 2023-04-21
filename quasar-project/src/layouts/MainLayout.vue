@@ -68,6 +68,18 @@ const linksList = [
     icon: 'home',
     link: '/todo'
   },
+  {
+    title: '계산기',
+    caption: '계산기',
+    icon: 'home',
+    link: '/cal'
+  },
+  {
+    title: '도서관리',
+    caption: '도서관리',
+    icon: 'menu_book',
+    link: '/books'
+  }
 ]
 
 export default defineComponent({

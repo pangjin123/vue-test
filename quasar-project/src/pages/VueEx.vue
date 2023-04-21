@@ -287,8 +287,8 @@
             @click="(event) => warn('아직 양식을 제출할 수 없습니다1.', event)"
             label="아직 양식을 제출할 수 없습니다1"
             color="secondary"
-            class="q-ma-sm">
-        </q-btn>
+            class="q-ma-sm"
+        ></q-btn>
     </div>
     <q-separator />
 
@@ -393,7 +393,7 @@ export default {
 
             classObject: {
                 active: true,
-                'text-h3': false
+                'text-h3': false,
             },
 
             isActive2: true,
@@ -597,7 +597,7 @@ export default {
 
 <style scoped>
     .active{
-        color:red;
+        color:rgb(255, 0, 0);
     }
     .my-card {
         width: 100%;

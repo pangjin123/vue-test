@@ -15,6 +15,8 @@ const routes = [
       { path: '/vue', component: () => import('pages/VueEx.vue') },
       { path: '/shop', component: () => import('pages/ShoppingList.vue') },
       { path: '/todo', component:() => import('pages/Todo.vue') },
+      { path: '/cal', component:() => import('pages/Calculator.vue')},
+      { path: '/books', component:() => import('pages/Books.vue')},
     ]
   },
   //여기에 path 추가하면 새로운 페이지로 실행
