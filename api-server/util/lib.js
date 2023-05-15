@@ -8,7 +8,11 @@ const lib = {
 
     //빈 값 체크
     isEmpty(value) {
-        if ( value == "" || value == null || value == undefined || (value != null && typeof value == "object" && !Object.keys(value).length ) ){
+        if (value == "" || 
+            value == null || 
+            value == undefined || 
+            (value != null && typeof value == "object" && !Object.keys(value).length ) 
+        ){
             return true; //값 없음
         }else{
             return false;   //값 있음

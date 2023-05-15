@@ -79,6 +79,12 @@ const linksList = [
     caption: '도서관리',
     icon: 'menu_book',
     link: '/books'
+  },
+  {
+    title: "db todo list",
+    caption: "vue + database",
+    icon: "chat",
+    link: "/dbtodo",
   }
 ]
 

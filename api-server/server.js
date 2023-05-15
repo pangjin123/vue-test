@@ -7,8 +7,8 @@ const port = config.PORT;
 const cors = require('cors');
 
 //옵션 설정
-let corsOptions = {
-    origin: '*',
+const corsOptions = {
+    origin: 'http://localhost:8080',
     credential: true,
 };
 app.use(cors(corsOptions));

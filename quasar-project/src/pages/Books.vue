@@ -24,8 +24,7 @@
       <q-item
         v-for="item in books"
         :key="item.title"
-        v-ripple
-      >
+        v-ripple >
         <q-item-section>  <!-- 책 이름 리스트 -->
           <q-item-label> {{ item.title }} </q-item-label>
         </q-item-section>
@@ -102,8 +101,7 @@ export default {
               icon:"book",
               color: "green",
             })
-          }
-          
+          }  
         },
         async removeItem(item){   //삭제
           await this.$q.notify({    //책을 삭제 했다는 메시지 출력

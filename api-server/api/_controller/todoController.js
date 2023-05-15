@@ -1,18 +1,22 @@
 const db = require('../../plugins/mysql');
 const TABLE = require("../../util/TABLE");
 const STATUS = require("../../util/STATUS");
-const {resData, currentTime, isEmpty } = require("../../util/lib");
+const {resData, isEmpty } = require("../../util/lib");
 const moment = require("../../util/moment");
 
 //전체 row 갯수
 const getTotal = async() => {
     try {
-        const query = `SELECT COUNT(*) AS cnt FROM ${TABLE.TODO}`;
+        const query = `SELECT COUNT(*) AS cnt FROM ${TABLE.TODO} WHERE done='N'`;
         const [[{ cnt }]] = await db.execute(query);
         return cnt;
     } catch (e) {
         console.log(e.message);
-        return resData(STATUS.E300.result, STATUS.E300.resultDesc, moment().format('LT'));  //에러 메시지 표시와 현재 시간
+        return resData(     //에러 메시지 표시와 현재 시간
+            STATUS.E300.result, 
+            STATUS.E300.resultDesc, 
+            moment().format('LT')
+        );
     }
 };
 
@@ -26,14 +30,18 @@ const getList = async (req) => {
         let where = "";
         if(lastId) {
             //0은 false
-            where = `WHERE id < ${lastId}`;
+            where = `AND id < ${lastId}`;
         }
-        const query = `SELECT * FROM ${TABLE.TODO} ${where} order by id desc limit 0, ${len}`;
+        const query = `SELECT * FROM ${TABLE.TODO} WHERE done='N' ${where} order by id desc limit 0, ${len}`;
         const [rows] = await db.execute(query);
         return rows;
     } catch(e) {
         console.log(e.message);
-        return resData(STATUS.E300.result, STATUS.E300.resultDesc, moment().format('LT'));
+        return resData(
+            STATUS.E300.result, 
+            STATUS.E300.resultDesc, 
+            moment().format('LT')
+        );
     }
 };
 
@@ -46,7 +54,11 @@ const getSelectOne = async(id) => {
         return cnt;
     } catch (e) {
         console.log(e.message);
-        return resData(STATUS.E300.result, STATUS.E300.resultDesc, moment().format('LT'));
+        return resData(
+            STATUS.E300.result, 
+            STATUS.E300.resultDesc, 
+            moment().format('LT')
+        );
     }
 };
 
@@ -54,27 +66,36 @@ const todoController = {
 
     //추가(create)
     create: async (req) => {
-        const { title, done } = req.body;
+        const { title } = req.body;
             //body check
-            if(isEmpty(title) || isEmpty(done)) {
-                return resData(STATUS.E100.result, STATUS.E100.resultDesc, moment().format('LT'));
+            if(isEmpty(title)) {
+                return resData(
+                    STATUS.E100.result, 
+                    STATUS.E100.resultDesc, 
+                    moment().format('LT')
+                );
             }
 
         try {
             //insert
-            const query = `INSERT INTO todo (title, done) VALUES (?,?)`;
-            const values = [title, done];
+            const query = `INSERT INTO ${TABLE.TODO} (title) VALUES (?)`;
+            const values = [title];
             const [rows] = await db.execute(query, values);
             if(rows.affectedRows == 1) {
                 return resData(     //데이터 표시
                     STATUS.S200.result,
                     STATUS.S200.resultDesc,
                     moment().format('LT'),
+                    {id: rows.insertId }
                 );
             }
         }catch(e) {
             console.log(e.message);
-            return resData(STATUS.E300.result, STATUS.E300.resultDesc, moment().format('LT'));
+            return resData(
+                STATUS.E300.result, 
+                STATUS.E300.resultDesc, 
+                moment().format('LT')
+            );
         }
     },
     
@@ -90,7 +111,11 @@ const todoController = {
                 { totalCount, list }
             );
         } else {
-            return resData(STATUS.S201.result, STATUS.S201.resultDesc, moment().format('LT'));
+            return resData(
+                STATUS.S201.result, 
+                STATUS.S201.resultDesc, 
+                moment().format('LT')
+            );
         }
     },
 
@@ -99,7 +124,11 @@ const todoController = {
         const { id } = req.params;  //url /로 들어오는 것
         const { title, done } = req.body;
         if (isEmpty(id) || isEmpty(title) || isEmpty(done)) {   //값을 안넣으면 나타내는 에러
-            return resData(STATUS.E100.result, STATUS.E100.resultDesc, moment().format('LT'));
+            return resData(
+                STATUS.E100.result, 
+                STATUS.E100.resultDesc, 
+                moment().format('LT')
+            );
         }
         try {
             const query = `UPDATE ${TABLE.TODO} SET title =?, done=? WHERE id =?`;
@@ -114,7 +143,11 @@ const todoController = {
             }
         } catch (e) {
             console.log(e.message)
-            return resData(STATUS.E300.result, STATUS.E300.resultDesc, moment().format('LT'));
+            return resData(
+                STATUS.E300.result, 
+                STATUS.E300.resultDesc, 
+                moment().format('LT')
+            );
         }
     },
 
@@ -122,7 +155,11 @@ const todoController = {
     delete: async (req) => {
         const { id } = req.params;
         if (isEmpty(id)) {
-            return resData(STATUS.E100.result, STATUS.E100.resultDesc, moment().format('LT'));
+            return resData(
+                STATUS.E100.result, 
+                STATUS.E100.resultDesc, 
+                moment().format('LT')
+            );
         }
         const cnt = await getSelectOne(id);
         try{
@@ -145,7 +182,11 @@ const todoController = {
             }
         } catch (e) {
             console.log(e.message);
-            return resData(STATUS.E300.result, STATUS.E300.resultDesc, moment().format('LT'));
+            return resData(
+                STATUS.E300.result, 
+                STATUS.E300.resultDesc, 
+                moment().format('LT')
+            );
         } 
         return rows;
     },
@@ -157,12 +198,20 @@ const todoController = {
             await db.execute(query);    //DB에 적용
         } catch (e) {   //에러
             console.log(e.message);
-            return resData(STATUS.E300.result, STATUS.E300.resultDesc, moment().format('LT'));  //DB 연동 실패 에러표시
+            return resData(     //DB 연동 실패 에러표시
+                STATUS.E300.result, 
+                STATUS.E300.resultDesc, 
+                moment().format('LT')
+            );  
         } 
 
         const { title, done, len } = req.body;
         if(isEmpty(title) || len > 100 || done == "N") {    //title 값이 없거나 len이 100을 넘거나 done이 N이면 에러메시지
-            return resData(STATUS.E100.result, STATUS.E100.resultDesc, moment().format('LT'));
+            return resData(
+                STATUS.E100.result, 
+                STATUS.E100.resultDesc, 
+                moment().format('LT')
+            );
         }
         try {   //Insert문
            const query = `INSERT INTO todo (title, done) VALUES `;
@@ -182,7 +231,11 @@ const todoController = {
            }
         }catch (e) {    //에러
             console.log(e.message);
-            return resData(STATUS.E300.result, STATUS.E300.resultDesc, moment().format('LT'));
+            return resData(
+                STATUS.E300.result, 
+                STATUS.E300.resultDesc, 
+                moment().format('LT')
+            );
         }
     },
 }

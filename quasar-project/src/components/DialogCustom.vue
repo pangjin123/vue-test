@@ -37,7 +37,8 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
     name: "DialogCustom",
     props: ['editTask', 'origin'],
     emits: ['onInput'],
@@ -54,15 +55,16 @@ export default {
     },
     methods: {
         onOKClick() {
-            this.$emit('onInput', this.editTask);
+            if (!this.editTask.title) this.editTask.title = this.origin;
+            this.$emit("onInput", this.editTask);
             this.dialog = false;
         },
         onCancelClick() {
-            this.editTask.title = this.origin,
-            this.dialog = false;
+            (this.editTask.title = this.origin),
+            (this.dialog = false);
         },
     },
-};
+});
 </script>
 
 <style></style>
