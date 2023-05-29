@@ -162,7 +162,7 @@ export default  defineComponent({   //defineComponent로 컴포넌트 명시
         },
 
         //intersection
-        async onInteresction(entry) {
+        async onIntersection(entry) {
             if (entry.inIntersecting) {
                 this.$q.loading.show(); //로딩바 실행
                 await this.fetchData(); //리스트 불러오기

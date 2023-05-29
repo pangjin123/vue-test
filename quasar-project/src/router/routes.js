@@ -21,7 +21,10 @@ const routes = [
     ]
   },
   //여기에 path 추가하면 새로운 페이지로 실행
-
+  {
+    path: "/signin",
+    component: () => import("layouts/SignIn.vue"),
+  },
 
   
   //오류 핸들링

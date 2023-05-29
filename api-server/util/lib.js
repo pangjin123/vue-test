@@ -18,6 +18,8 @@ const lib = {
             return false;   //값 있음
         }
     },
-
+    getIp(req) {
+        return req.ip.replace("::1", "127.0.0.1");
+    },
 };
 module.exports = lib;

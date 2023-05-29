@@ -31,7 +31,7 @@ const create = async (payload) => {
 //리스트 가져오기
 const list = async(payload) => {
     try {
-        if(token.list != nill) {
+        if(token.list != null) {
             token.list = token.list.cancel("cancle list");
         }
         token.list = axios.CancelToken.source();

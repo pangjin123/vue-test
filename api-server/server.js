@@ -6,10 +6,13 @@ const app = express();
 const port = config.PORT;
 const cors = require('cors');
 
+const path = require('path');
+const fs = require('fs');
+
 //옵션 설정
 const corsOptions = {
     origin: 'http://localhost:8080',
-    credential: true,
+    credentials: true,
 };
 app.use(cors(corsOptions));
 
@@ -26,3 +29,10 @@ webServer.listen(port,()=>{
     console.log(`http://localhost:${port}`);
 })
 
+//global settings
+global.UPLOAD_PATH = path.join("upload/");
+global.MEMBER_PHOTO_PATH = path.join("upload/memberPhoto");
+fs.mkdirSync(MEMBER_PHOTO_PATH, { recursive: true });
+
+//image storage
+app.use("/upload/memberPhoto", express.static("upload/memberPhoto"));
